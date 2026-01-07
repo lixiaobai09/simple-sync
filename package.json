@@ -1,0 +1,59 @@
+{
+  "name": "simple-sync",
+  "displayName": "simple-sync",
+  "description": "A simple sync tool to sync local file to remote file.",
+  "version": "0.0.1",
+  "engines": {
+    "vscode": "^1.107.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "simple-sync.sync",
+        "title": "FileSync: Sync Current File to Server"
+      },
+      {
+        "command": "simple-sync.chooseTarget",
+        "title": "FileSync: Choose Remote Target"
+      }
+    ],
+    "configuration": {
+      "title": "Simple Sync Config",
+      "properties": {
+        "simpleSync.remoteTargets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "user@server:/path/to/repo"
+          ],
+          "description": "List of remote destinations (user@host:remote_path)"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile && npm run lint",
+    "lint": "eslint src",
+    "test": "vscode-test"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.107.0",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "22.x",
+    "typescript-eslint": "^8.48.1",
+    "eslint": "^9.39.1",
+    "typescript": "^5.9.3",
+    "@vscode/test-cli": "^0.0.12",
+    "@vscode/test-electron": "^2.5.2"
+  }
+}
