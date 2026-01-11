@@ -152,7 +152,7 @@ export function activate(context: vscode.ExtensionContext) {
         const remoteTarget = context.workspaceState.get<string>(CURRENT_TARGET_KEY);
         
         if (autoSync && remoteTarget) {
-            syncFile(document, remoteTarget, true);
+            syncFile(document, remoteTarget);
         }
     });
 
