@@ -1,10 +1,11 @@
 {
   "name": "simple-sync",
+  "publisher": "lixiaobai09",
   "displayName": "simple-sync",
   "description": "A simple sync tool to sync local file to remote file.",
   "version": "0.0.1",
   "engines": {
-    "vscode": "^1.107.0"
+    "vscode": "^1.104.0"
   },
   "categories": [
     "Other"
@@ -47,7 +48,7 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.107.0",
+    "@types/vscode": "^1.104.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "22.x",
     "typescript-eslint": "^8.48.1",
