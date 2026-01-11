@@ -22,20 +22,23 @@ export function activate(context: vscode.ExtensionContext) {
 
     function syncFile(document: vscode.TextDocument, remoteTarget: string, silent: boolean = false) {
         const localPath = document.uri.fsPath;
-        const relativePath = vscode.workspace.asRelativePath(document.uri);
+        const workspaceFolder = vscode.workspace.getWorkspaceFolder(document.uri);
         
-        if (relativePath === localPath) {
+        if (!workspaceFolder) {
             if (!silent) {
                 vscode.window.showErrorMessage('Please run this command within an opened workspace folder');
             }
             return;
         }
 
+        const workspaceName = path.basename(workspaceFolder.uri.fsPath);
+        const relativePath = path.relative(workspaceFolder.uri.fsPath, localPath);
+        
         // commnad
-        const command = `rsync -avz --exclude '.DS_Store' "${localPath}" "${remoteTarget}/${relativePath}"`;
+        const command = `rsync -avz --exclude '.DS_Store' "${localPath}" "${remoteTarget}/${workspaceName}/${relativePath}"`;
 
         if (!silent) {
-            vscode.window.setStatusBarMessage(`Syncing to ${remoteTarget}: ${relativePath}...`);
+            vscode.window.setStatusBarMessage(`Syncing to ${remoteTarget}: ${workspaceName}/${relativePath}...`);
         }
         
         exec(command, (error, stdout, stderr) => {
@@ -63,10 +66,10 @@ export function activate(context: vscode.ExtensionContext) {
 
             if (info) {
                 // not exist remote directory, create it first
-                command = `ssh ${info.host} "mkdir -p '${info.remotePath}'" && rsync -avz --exclude '.DS_Store' "${localPath}/" "${remoteTarget}/"`;
+                command = `ssh ${info.host} "mkdir -p '${info.remotePath}'" && rsync -avz --exclude '.DS_Store' "${localPath}" "${remoteTarget}/"`;
             } else {
                 // ensure local directory exists
-                command = `mkdir -p "${remoteTarget}" && rsync -avz --exclude '.DS_Store' "${localPath}/" "${remoteTarget}/"`;
+                command = `mkdir -p "${remoteTarget}" && rsync -avz --exclude '.DS_Store' "${localPath}" "${remoteTarget}/"`;
             }
             
             vscode.window.setStatusBarMessage(`Syncing workspace to ${remoteTarget}...`);
